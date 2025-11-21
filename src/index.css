@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Demons Dark Fantasy Theme - Infernal Palace */
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 280 30% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 280 35% 6%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Hellfire Purple Primary */
+    --primary: 280 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 280 100% 65%;
+
+    /* Crimson Blood Secondary */
+    --secondary: 348 83% 47%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 280 20% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    /* Dark Purple Accent */
+    --accent: 270 60% 25%;
+    --accent-foreground: 0 0% 98%;
+
+    /* Destructive remains blood red */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 280 30% 18%;
+    --input: 280 30% 12%;
+    --ring: 280 100% 50%;
+
+    --radius: 0.5rem;
+
+    /* Gradients for demonic effects */
+    --gradient-hellfire: linear-gradient(135deg, hsl(280 100% 50%), hsl(348 83% 47%));
+    --gradient-abyss: linear-gradient(180deg, hsl(280 30% 8%), hsl(0 0% 4%));
+    --gradient-inferno: linear-gradient(90deg, hsl(348 83% 47%) 0%, hsl(280 100% 50%) 50%, hsl(348 83% 47%) 100%);
+    
+    /* Shadows with demonic glow */
+    --shadow-hellfire: 0 0 40px hsl(280 100% 50% / 0.5);
+    --shadow-crimson: 0 0 30px hsl(348 83% 47% / 0.4);
+    --shadow-elevated: 0 10px 40px hsl(0 0% 0% / 0.8);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* Demonic glow animation */
+  @keyframes hellfire-pulse {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(280 100% 50% / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(280 100% 50% / 0.6);
+    }
+  }
+
+  @keyframes crimson-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px hsl(348 83% 47% / 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px hsl(348 83% 47% / 0.6);
+    }
+  }
+
+  .animate-hellfire {
+    animation: hellfire-pulse 3s ease-in-out infinite;
+  }
+
+  .animate-crimson {
+    animation: crimson-glow 3s ease-in-out infinite;
+  }
+}
