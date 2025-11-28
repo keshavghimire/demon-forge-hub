@@ -1,6 +1,3 @@
-Here’s an updated `README.md` you can drop into the repo:
-
-````markdown
 # Demon Forge Hub 👹  
 **An AI-Enhanced Gamified NFT Marketplace on Polygon**
 
@@ -139,7 +136,7 @@ demon-forge-hub/
 ├── typechain-types/
 ├── artifacts/
 └── public/
-````
+```
 
 ---
 
@@ -259,8 +256,6 @@ Open the URL printed by Vite (usually `http://localhost:5173`).
 * AI lore microservice + localStorage caching
 * Basic Mumbai + Hardhat deployment scripts
 
-
-
 ---
 
 ## 🧪 Testing
@@ -309,6 +304,6 @@ See `LICENSE` for details.
 
 ---
 
-##  Author
+## 👤 Author
 
 **Keshav Ghimire**
