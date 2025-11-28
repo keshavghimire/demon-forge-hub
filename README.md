@@ -1,247 +1,314 @@
-# Demons NFT Marketplace
+Here’s an updated `README.md` you can drop into the repo:
 
-A decentralized NFT marketplace built on Polygon Mumbai Testnet featuring minting, burning, buying, and selling of demonic-themed NFTs.
+````markdown
+# Demon Forge Hub 👹  
+**An AI-Enhanced Gamified NFT Marketplace on Polygon**
 
-## 🚀 Features
+Demon Forge Hub is a decentralized NFT marketplace that combines:
 
-- **Wallet Integration**: Connect MetaMask wallet with automatic Mumbai network switching
-- **NFT Minting**: Upload images/videos and mint NFTs with IPFS metadata storage
-- **NFT Burning**: Permanently destroy NFTs you own
-- **Marketplace**: List NFTs for sale and buy from other users
-- **My NFTs**: Manage your collection with listing and burning capabilities
-- **Faucet Integration**: Direct access to Polygon Mumbai testnet faucet
-- **Real-time Stats**: Live marketplace statistics (minted, burned, sold, active listings)
-- **Dark Fantasy Theme**: Immersive UI with demonic aesthetics
+- **ERC-721 smart contracts** on Polygon Mumbai  
+- **Gamified NFT mechanics** (rarity, levels, corruption, battle stats)  
+- **AI-enhanced lore generation** for each demon  
+- **Modern React + TypeScript frontend** with read-only marketplace browsing  
 
-## 🛠️ Tech Stack
+The goal is to turn NFTs from static images into **narrative-rich, evolving digital entities**.
 
-- **Frontend**: React, TypeScript, Tailwind CSS, shadcn/ui
-- **Blockchain**: Solidity, Hardhat, Ethers.js
-- **Storage**: IPFS via NFT.Storage
-- **Network**: Polygon Mumbai Testnet
-- **Wallet**: MetaMask
+---
 
-## 📋 Prerequisites
+## 🚀 Core Features
 
-- Node.js (v16 or higher)
-- MetaMask browser extension
-- Polygon Mumbai testnet MATIC tokens (get from faucet)
+### 🎴 NFT & Marketplace
 
-## 🔧 Installation
+- ERC-721-based **Demon NFTs** with on-chain stats
+- **Mint, list, buy, unlist, and burn** NFTs
+- On-chain gamification:
+  - Rarity tiers (Common → Mythic)
+  - Level system
+  - Corruption progression
+  - Battle win tracking
+- **Peer-to-peer marketplace** (no centralized order book)
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd demon-forge-hub
-   ```
+### 🧠 AI-Enhanced Lore Generation
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+- Off-chain AI (Node.js/Express) service generates:
+  - Name, title, origin realm
+  - Abilities and personality traits
+  - Multi-paragraph backstory
+- Fallback **deterministic templates** when external AI is unavailable
+- Lore is cached in the browser (`localStorage`) for fast retrieval
 
-3. **Set up environment variables**
-   ```bash
-   cp env.example .env
-   ```
-   
-   Fill in your environment variables:
-   ```env
-   # Hardhat Configuration
-   PRIVATE_KEY=your_private_key_here
-   POLYGONSCAN_API_KEY=your_polygonscan_api_key_here
+> ❗ Lore is **not stored on-chain** in the current prototype.  
+> The contract only stores a metadata URI (which can point to IPFS or a data URL).
 
-   # Frontend Configuration
-   REACT_APP_CONTRACT_ADDRESS=
-   REACT_APP_NFT_STORAGE_API_KEY=your_nft_storage_api_key_here
+### 👀 Read-Only Marketplace
 
-   # Network Configuration
-   REACT_APP_NETWORK_ID=80001
-   REACT_APP_RPC_URL=https://rpc-mumbai.maticvigil.com
-   ```
+- Users can **browse all active listings without connecting a wallet**
+- Read-only JSON-RPC provider is used when no wallet is connected
+- Write operations (mint, list, buy, burn, level up) require MetaMask
 
-4. **Get NFT.Storage API Key**
-   - Visit [NFT.Storage](https://nft.storage/)
-   - Create an account and generate an API key
-   - Add it to your `.env` file
+### 🧱 Tech Stack
 
-## 🚀 Deployment
+**Frontend**
 
-### Smart Contract Deployment
+- React 18 + TypeScript
+- Vite
+- Tailwind CSS + shadcn/ui + Radix UI
+- React Router
+- TanStack Query
+- React Hook Form
+- Lucide icons
 
-1. **Compile the contract**
-   ```bash
-   npx hardhat compile
-   ```
+**Smart Contracts**
 
-2. **Deploy to Mumbai testnet**
-   ```bash
-   npx hardhat run scripts/deploy.ts --network mumbai
-   ```
+- Solidity `0.8.20`
+- Hardhat `2.19.x`
+- OpenZeppelin Contracts `5.x`
+- TypeChain + Ethers.js
 
-3. **Update contract address**
-   - Copy the deployed contract address from the terminal output
-   - Add it to your `.env` file as `REACT_APP_CONTRACT_ADDRESS`
+**AI & Storage**
 
-4. **Verify contract (optional)**
-   ```bash
-   npx hardhat verify --network mumbai <CONTRACT_ADDRESS>
-   ```
+- Node.js + Express (AI lore microservice)
+- Optional external LLM API (e.g., OpenAI)
+- IPFS via `NFT.Storage` (utilities implemented)
+- `localStorage` for lore + cached metadata
+- Optional Supabase client (not yet wired into core flows)
 
-### Frontend Deployment
+---
 
-1. **Build the project**
-   ```bash
-   npm run build
-   ```
+## 🏗 Architecture Overview
 
-2. **Deploy to your preferred platform**
-   - Vercel, Netlify, or any static hosting service
-   - Make sure to set the environment variables in your deployment platform
+The system is implemented as a multi-layered dApp:
 
-## 🎮 Usage
+- **Smart Contract Layer**  
+  - `DemonsNFT.sol`  
+  - ERC-721 + `ERC721URIStorage` + `Ownable` + `ReentrancyGuard`  
+  - Stores:
+    - Ownership
+    - Metadata URI
+    - Demon stats (rarity, level, corruption, trade count, battle wins)
+    - Marketplace listings
 
-### Getting Started
+- **Frontend Layer** (React + TypeScript)  
+  Pages:
+  - `Home` – overview and stats
+  - `Mint` – upload media, mint NFT, trigger lore
+  - `Marketplace` – browse and buy listed NFTs
+  - `MyNFTs` – manage owned demons
+  - `NFTDetail` – full demon details + lore
+  - `Faucet` – instructions for Mumbai testnet MATIC
 
-1. **Connect Wallet**
-   - Click "Connect Wallet" in the navbar
-   - MetaMask will prompt to switch to Mumbai network
-   - Approve the connection
+- **AI Lore Service**  
+  - Express server (`/api/generate-lore`)
+  - Accepts JSON payload with rarity, tokenId, etc.
+  - Returns structured `DemonLore` object
 
-2. **Get Test Tokens**
-   - Visit the Faucet page
-   - Click "Open Polygon Faucet"
-   - Enter your wallet address and claim free MATIC
+- **Storage & Caching**
+  - IPFS (planned for full integration)
+  - `localStorage` for lore and some metadata
+  - Optional Supabase client stub for future analytics
 
-3. **Mint NFTs**
-   - Go to the Mint page
-   - Upload an image or video
-   - Enter name and description
-   - Click "Mint NFT"
-   - Approve the transaction in MetaMask
+---
 
-4. **List for Sale**
-   - Go to "My NFTs" page
-   - Click "List" on any NFT you own
-   - Enter the price in MATIC
-   - Confirm the transaction
+## 📂 Project Structure
 
-5. **Buy NFTs**
-   - Browse the Marketplace
-   - Click "Buy" on any listed NFT
-   - Approve the transaction and payment
+```text
+demon-forge-hub/
+├── contracts/
+│   └── DemonsNFT.sol          # Main ERC-721 contract
+├── scripts/
+│   ├── deploy.ts              # TypeScript deployment script
+│   └── deploy.cjs             # CommonJS deployment script
+├── src/
+│   ├── components/
+│   ├── contexts/
+│   ├── lib/
+│   │   ├── wallet.ts          # WalletService
+│   │   ├── contract.ts        # ContractService (read + write)
+│   │   ├── ai-service.ts      # AI service client
+│   │   └── lore-storage.ts    # localStorage helpers
+│   ├── pages/
+│   │   ├── Home.tsx
+│   │   ├── Mint.tsx
+│   │   ├── Marketplace.tsx
+│   │   ├── MyNFTs.tsx
+│   │   ├── NFTDetail.tsx
+│   │   └── Faucet.tsx
+│   └── assets/
+├── server/
+│   └── ai-service.js          # Express AI microservice
+├── typechain-types/
+├── artifacts/
+└── public/
+````
 
-6. **Burn NFTs**
-   - Go to "My NFTs" page
-   - Click "Burn" on any NFT you own
-   - Confirm the irreversible action
+---
 
-## 📁 Project Structure
+## ⚙️ Getting Started
 
+### 1️⃣ Prerequisites
+
+* Node.js (v16+)
+* npm or yarn
+* MetaMask (browser extension)
+* Access to:
+
+  * Local Hardhat node **or**
+  * Polygon Mumbai testnet RPC
+
+---
+
+### 2️⃣ Install Dependencies
+
+```bash
+git clone <YOUR_REPO_URL>
+cd demon-forge-hub
+npm install
 ```
-src/
-├── components/          # Reusable UI components
-│   ├── Layout.tsx      # Main layout wrapper
-│   ├── Navbar.tsx      # Navigation with wallet connection
-│   └── ui/             # shadcn/ui components
-├── contexts/           # React contexts
-│   └── WalletContext.tsx # Wallet state management
-├── lib/                # Utility libraries
-│   ├── wallet.ts       # Wallet service
-│   ├── contract.ts     # Smart contract interactions
-│   └── utils.ts        # General utilities
-├── pages/              # Page components
-│   ├── Home.tsx        # Landing page with stats
-│   ├── Mint.tsx        # NFT minting page
-│   ├── MyNFTs.tsx      # User's NFT collection
-│   ├── Marketplace.tsx  # NFT marketplace
-│   └── Faucet.tsx      # Test token faucet
-└── assets/             # Static assets
 
-contracts/
-└── DemonsNFT.sol       # Main ERC-721 contract
+---
 
-scripts/
-└── deploy.ts           # Deployment script
+### 3️⃣ Environment Configuration
+
+Create a `.env` file (or `.env.local` for Vite) based on `.env.example`:
+
+```env
+# Blockchain / RPC
+VITE_RPC_URL=http://127.0.0.1:8545
+VITE_NETWORK_ID=1337              # 1337 (Hardhat) or 80001 (Mumbai)
+
+# Contract
+VITE_CONTRACT_ADDRESS=0xYourContractAddress
+
+# IPFS / NFT.Storage (optional)
+VITE_NFT_STORAGE_API_KEY=your_nft_storage_api_key
+
+# AI Service
+VITE_AI_SERVICE_URL=http://localhost:3001
 ```
 
-## 🔒 Smart Contract Features
+> ✅ In the **current prototype**, the default minting flow uses `data:` URLs + local caching.
+> IPFS utilities exist but are not fully wired into the main UI yet.
 
-The `DemonsNFT` contract includes:
+---
 
-- **ERC-721 Standard**: Full NFT functionality
-- **Minting**: Only contract owner can mint NFTs
-- **Burning**: NFT owners can burn their tokens
-- **Marketplace**: List, buy, and unlist NFTs
-- **Events**: Comprehensive event logging
-- **Stats**: Track minted, burned, and sold NFTs
+### 4️⃣ Running a Local Hardhat Network
 
-### Contract Functions
+In a separate terminal:
 
-- `mintNFT(address to, string tokenURI)`: Mint new NFT
-- `burnNFT(uint256 tokenId)`: Burn existing NFT
-- `listNFT(uint256 tokenId, uint256 price)`: List NFT for sale
-- `buyNFT(uint256 tokenId)`: Buy listed NFT
-- `unlistNFT(uint256 tokenId)`: Remove from marketplace
-- `getActiveListings()`: Get all active listings
-- `getMarketplaceStats()`: Get marketplace statistics
+```bash
+npm run node
+```
 
-## 🌐 Network Configuration
+This runs a Hardhat node at `http://127.0.0.1:8545`.
 
-### Polygon Mumbai Testnet
-- **Network Name**: Polygon Mumbai
-- **RPC URL**: https://rpc-mumbai.maticvigil.com
-- **Chain ID**: 80001
-- **Currency**: MATIC
-- **Block Explorer**: https://mumbai.polygonscan.com/
+---
 
-## 🐛 Troubleshooting
+### 5️⃣ Deploying the Contract Locally
 
-### Common Issues
+```bash
+npm run deploy:localhost
+```
 
-1. **"Contract not initialized" error**
-   - Make sure `REACT_APP_CONTRACT_ADDRESS` is set in your `.env` file
-   - Ensure the contract is deployed and the address is correct
+Copy the deployed address from the console and update:
 
-2. **"MetaMask is not installed" error**
-   - Install MetaMask browser extension
-   - Make sure it's enabled and unlocked
+```env
+VITE_CONTRACT_ADDRESS=0x...
+VITE_NETWORK_ID=1337
+VITE_RPC_URL=http://127.0.0.1:8545
+```
 
-3. **"Insufficient funds" error**
-   - Get test MATIC from the faucet
-   - Check your wallet balance
+---
 
-4. **"Network mismatch" error**
-   - The app will automatically prompt to switch to Mumbai network
-   - Manually add Mumbai network if needed
+### 6️⃣ Starting the AI Lore Service (Optional)
 
-5. **IPFS upload fails**
-   - Check your NFT.Storage API key
-   - Ensure the API key has proper permissions
+```bash
+cd server
+node ai-service.js
+```
 
-## 🤝 Contributing
+The service exposes:
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+* `POST /api/generate-lore`
+
+If the AI API key is not configured, the service falls back to deterministic templates.
+
+---
+
+### 7️⃣ Start the Frontend
+
+Back in the project root:
+
+```bash
+npm run dev
+```
+
+Open the URL printed by Vite (usually `http://localhost:5173`).
+
+---
+
+## ✅ Current Status vs Intended Design
+
+### Implemented
+
+* ERC-721 contract with:
+
+  * Rarity, level, corruption, trade count, battle wins
+  * Marketplace: mint, list, buy, unlist, burn
+* React + TypeScript frontend
+* Read-only marketplace browsing
+* AI lore microservice + localStorage caching
+* Basic Mumbai + Hardhat deployment scripts
+
+
+
+---
+
+## 🧪 Testing
+
+> ⚠️ **Important:** The current repository does **not** include automated tests yet.
+
+Planned testing strategy:
+
+* **Smart Contracts**
+
+  * Hardhat + Chai unit tests
+  * Solidity Coverage for metrics
+  * Hardhat Gas Reporter for cost analysis
+* **Integration**
+
+  * End-to-end workflows on a local Hardhat node
+* **Frontend**
+
+  * UI tests and task-based user scenarios
+
+For now, validation is primarily manual:
+
+* Mint → List → Buy → Burn
+* Read-only browsing without wallet
+* Lore generation and caching behavior
+
+---
+
+## 🔐 Security Considerations
+
+* Uses `ReentrancyGuard` on value-transferring functions (`buyNFT`)
+* Ownership checks for listing and burning
+* Uses `_safeMint` and `_safeTransfer` from OpenZeppelin
+* Benefits from Solidity `0.8.x` overflow/underflow protections
+* No private keys handled in the frontend — all signing via MetaMask
+
+For a production deployment, a **formal audit** and extended threat modeling are strongly recommended.
+
+---
+
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the **MIT License**.
+See `LICENSE` for details.
 
-## ⚠️ Disclaimer
+---
 
-This is a testnet application for demonstration purposes only. No real value is involved. Always test thoroughly before deploying to mainnet.
+##  Author
 
-## 🔗 Links
-
-- [Polygon Mumbai Faucet](https://faucet.polygon.technology/)
-- [NFT.Storage](https://nft.storage/)
-- [MetaMask](https://metamask.io/)
-- [Polygon Mumbai Explorer](https://mumbai.polygonscan.com/)
-
-## 📞 Support
-
-For support, please open an issue in the GitHub repository or contact the development team.
+**Keshav Ghimire**
